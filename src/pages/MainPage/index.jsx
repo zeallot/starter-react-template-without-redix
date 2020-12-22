@@ -1,21 +1,21 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { Button } from '../../shared/basic-components/Buttons';
+import { useState } from 'react';
 import Container from '../../shared/basic-components/Container';
-import { fetchDog } from './redux/actions';
+import { Button } from '../../shared/basic-components/Buttons';
+import api from '../../services/apiService';
 
 const MainPage = () => {
-  const dispatch = useDispatch();
-  const { image } = useSelector((state) => ({
-    image: state.dog.img,
-  }));
-  const onRollDog = () => {
-    dispatch(fetchDog());
+  const [img, setImg] = useState('');
+  const rollDog = async () => {
+    const { data } = await api.dog.getRandomDogImg();
+    setImg(data.message);
   };
 
   return (
     <Container>
-      <img src={image} alt="" />
-      <Button onClick={onRollDog}>Roll dog</Button>
+      {
+        img && <img src={img} alt="dog" />
+      }
+      <Button onClick={rollDog}>Roll dog</Button>
     </Container>
   );
 };
